@@ -3,3 +3,4 @@
 [Codecademy Python Course](www.codecademy.com/tracks/python/): Interactive web course to learn Python.  
 [learnpython](http://www.learnpython.org/): Similar to above.  
 [RobotPy Wiki](http://firstforge.wpi.edu/sf/go/projects.robotpy/wiki): A somewhat lacking documentation of RobotPy, mostly points you to the code samples included.  
+[WPILib Documentation](http://users.wpi.edu/~bamiller/WPILib/WPILib.pdf): Documentation for the C++ library RobotPy is ported from. Nearly every function and class is the same.  
