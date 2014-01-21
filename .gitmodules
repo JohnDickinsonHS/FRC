@@ -1,0 +1,3 @@
+[submodule "robotpy_src"]
+	path = robotpy_src
+	url = https://github.com/robotpy/robotpy.git
