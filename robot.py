@@ -9,8 +9,6 @@ lstick = wpilib.Joystick(1)
 leftmotor = wpilib.Jaguar(1)
 rightmotor = wpilib.Jaguar(2)
 
-leftdrivefudge = 1.2125
-
 def checkRestart():
     if lstick.GetRawButton(10):
         raise RuntimeError("Restart")
@@ -33,17 +31,11 @@ def teleop():
     while wpilib.IsOperatorControl() and wpilib.IsEnabled():
         dog.Feed()
         checkRestart()
-        stickX = lstick.getX()
-        stickY = lstick.getY()
-        if stickX > 0:
-            rightY = ((stickY * -1)+'''math.abs'''(stickX))/2
-            leftY = stickY * (-1 * leftdrivefudge)
-        if stickX < 0:
-            leftY = (stickY * (-1 * leftdrivefudge)+'''math.abs'''(stickX))/2
-            rightY = stickY * -1
+        stickY = lstick.GetY()
+        stickX = lstick.GetX()
         # Motor control
-        leftmotor.Set(leftY)
-        rightmotor.Set(rightY)
+        leftmotor.Set((stickY*-1)+stickX)
+        rightmotor.Set((stickY*-1)-stickX)
         wpilib.Wait(0.04)
 
 def run():
