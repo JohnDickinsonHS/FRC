@@ -34,8 +34,8 @@ def teleop():
         stickY = lstick.GetY()
         stickX = lstick.GetX()
         # Motor control
-        leftmotor.Set((stickY*-1)+stickX)
-        rightmotor.Set((stickY*-1)-stickX)
+        leftmotor.Set((-stickY)+stickX)
+        rightmotor.Set((-stickY)-stickX)
         wpilib.Wait(0.04)
 
 def run():
