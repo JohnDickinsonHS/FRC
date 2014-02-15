@@ -2,15 +2,15 @@ try:
     import wpilib
 except:
     from pyfrc import wpilib
-#import math
 
-lstick = wpilib.Joystick(1)
+stick = wpilib.Joystick(1)
 
 leftmotor = wpilib.Jaguar(1)
 rightmotor = wpilib.Jaguar(2)
+launcher_tension = wpilib.Jaguar(3)
 
 def checkRestart():
-    if lstick.GetRawButton(10):
+    if stick.GetRawButton(10):
         raise RuntimeError("Restart")
 
 def disabled():
@@ -31,11 +31,17 @@ def teleop():
     while wpilib.IsOperatorControl() and wpilib.IsEnabled():
         dog.Feed()
         checkRestart()
-        stickY = lstick.GetY()
-        stickX = lstick.GetX()
+        stickY = stick.GetY()
+        stickX = stick.GetX()
         # Motor control
         leftmotor.Set((-stickY)+stickX)
         rightmotor.Set((-stickY)-stickX)
+        if stick.GetRawButton(2):
+            launcher_tension.Set(128)
+        else:
+            launcher_tension.Set(0)
+        '''if stick.GetRawButton(1):
+            release launcher tension'''
         wpilib.Wait(0.04)
 
 def run():
