@@ -10,24 +10,23 @@ leftmotor = wpilib.Jaguar(1)
 rightmotor = wpilib.Jaguar(2)
 leftarmmotor = wpilib.Victor(3)
 rightarmmotor = wpilib.Victor(4)
-
-#Program variables
-armpos = 0
+tensionmotor = wpilib.Jaguar(5)
+release = wpilib.Servo(6)
 
 #Manually-called functions
 def movearm(power):
+    if(armruntime == null):
+        armruntime = 0
     if(starttime == null):
         starttime = time.time()
     else:
         if(power > 0):
-            armpos += time.time() - starttime
+            armruntime += time.time() - starttime
         elif(power < 0):
-            armpos -= time.time() - starttime
-    if(armpos != 1) and (armpos != -1) and (abs(throttle)-15 > 0):
+            armruntime -= time.time() - starttime
+    if(abs(armruntime)<1) and (abs(throttle)-15 > 0):
         leftarmmotor.Set(power)
         rightarmmotor.Set(power)
-
-
 
 #Competition-called code        
 def checkRestart():
@@ -59,8 +58,16 @@ def teleop():
         leftmotor.Set((-stickY)+stickX)
         rightmotor.Set((-stickY)-stickX)
         movearm(throttle)
+        if(joystick.GetRawButton(2)):
+            tensionmotor.Set(25)
+        else:
+            tensionmotor.Set(0)
+        if(joystick.GetRawButton(1)):
+            lastrelease = time.time()
+            release.Set(0.0)
+        elif(time.time()-lastrelease>=1) and (release.Get()!=1.0):
+            release.Set(1.0)
         wpilib.Wait(0.04)
-
 def run():
     """Main loop"""
     while 1:
