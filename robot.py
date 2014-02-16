@@ -2,13 +2,34 @@ try:
     import wpilib
 except:
     from pyfrc import wpilib
+import time
 
+#Hardware setup
 stick = wpilib.Joystick(1)
-
 leftmotor = wpilib.Jaguar(1)
 rightmotor = wpilib.Jaguar(2)
-launcher_tension = wpilib.Jaguar(3)
+leftarmmotor = wpilib.Victor(3)
+rightarmmotor = wpilib.Victor(4)
 
+#Program variables
+armpos = 0
+
+#Manually-called functions
+def movearm(power):
+    if(!starttime):
+        starttime = time.time()
+    else:
+        if(power > 0):
+            armpos += time.time() - starttime
+        elif(power < 0):
+            armpos -= time.time() - starttime
+    if(armpos != 1) and (armpos != -1) and (abs(throttle)-15 > 0):
+        leftarmmotor.Set(power)
+        rightarmmotor.Set(power)
+
+
+
+#Competition-called code        
 def checkRestart():
     if stick.GetRawButton(10):
         raise RuntimeError("Restart")
@@ -33,15 +54,11 @@ def teleop():
         checkRestart()
         stickY = stick.GetY()
         stickX = stick.GetX()
+        throttle = stick.GetThrottle()
         # Motor control
         leftmotor.Set((-stickY)+stickX)
         rightmotor.Set((-stickY)-stickX)
-        if stick.GetRawButton(2):
-            launcher_tension.Set(128)
-        else:
-            launcher_tension.Set(0)
-        '''if stick.GetRawButton(1):
-            release launcher tension'''
+        movearm(throttle)
         wpilib.Wait(0.04)
 
 def run():
