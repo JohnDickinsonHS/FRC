@@ -16,7 +16,7 @@ armpos = 0
 
 #Manually-called functions
 def movearm(power):
-    if(!starttime):
+    if(starttime == null):
         starttime = time.time()
     else:
         if(power > 0):
