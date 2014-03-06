@@ -15,9 +15,9 @@ release = wpilib.Servo(6)
 
 #Manually-called functions
 def movearm(power):
-    if(armruntime == null):
+    if 'armruntime' not in locals():
         armruntime = 0
-    if(starttime == null):
+    elif 'starttime' not in locals():
         starttime = time.time()
     else:
         if(power > 0):
