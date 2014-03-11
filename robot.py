@@ -12,6 +12,7 @@ leftarmmotor = wpilib.Victor(3)
 rightarmmotor = wpilib.Victor(4)
 tensionmotor = wpilib.Jaguar(5)
 release = wpilib.Servo(6)
+ds = wpilib.DriverStation.GetInstance()
 
 #Manually-called functions
 def movearm(power):
@@ -24,7 +25,7 @@ def movearm(power):
             armruntime += time.time() - starttime
         elif(power < 0):
             armruntime -= time.time() - starttime
-    if(abs(armruntime)<1) and (abs(throttle)-15 > 0):
+    if(abs(armruntime)<1) and (abs(power)-15 > 0):
         leftarmmotor.Set(power)
         rightarmmotor.Set(power)
 
@@ -35,11 +36,19 @@ def checkRestart():
 
 def disabled():
     while wpilib.IsDisabled():
+        '''if(ds.GetDigitalIn(1)):
+
+        '''
         checkRestart()
         wpilib.Wait(0.01)
 
 def autonomous():
     wpilib.GetWatchdog().SetEnabled(False)
+    leftmotor.Set(25)
+    rightmotor.Set(25)
+    wpilib.Wait(4)
+    leftmotor.Set(0)
+    rightmotor.Set(0)
     while wpilib.IsAutonomous() and wpilib.IsEnabled():
         checkRestart()
         wpilib.Wait(0.01)
@@ -52,17 +61,17 @@ def teleop():
         dog.Feed()
         checkRestart()
         stickY = stick.GetY()
-        stickX = stick.GetX()
+        stickX = -stick.GetX()
         throttle = stick.GetThrottle()
         # Motor control
         leftmotor.Set((-stickY)+stickX)
         rightmotor.Set((-stickY)-stickX)
         movearm(throttle)
-        if(joystick.GetRawButton(2)):
+        if(stick.GetRawButton(2)):
             tensionmotor.Set(25)
         else:
             tensionmotor.Set(0)
-        if(joystick.GetRawButton(1)):
+       if(stick.GetRawButton(1)):
             lastrelease = time.time()
             release.Set(0.0)
         elif(time.time()-lastrelease>=1) and (release.Get()!=1.0):
