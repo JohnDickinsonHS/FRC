@@ -2,7 +2,6 @@ try:
     import wpilib
 except:
     from pyfrc import wpilib
-import time
 
 #Hardware setup
 stick = wpilib.Joystick(1)
@@ -62,10 +61,9 @@ def teleop():
         else:
             tensionmotor.Set(0)
         if(stick.GetRawButton(1)):
-            lastrelease = time.time()
-            release.Set(0.0)
-        elif(time.time()-lastrelease>=1) and (release.Get()!=1.0):
             release.Set(1.0)
+            wpilib.Wait(0.5)
+            release.Set(0.0)
         wpilib.Wait(0.04)
 def run():
     """Main loop"""
