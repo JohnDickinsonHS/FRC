@@ -16,18 +16,8 @@ ds = wpilib.DriverStation.GetInstance()
 
 #Manually-called functions
 def movearm(power):
-    if 'armruntime' not in locals():
-        armruntime = 0
-    elif 'starttime' not in locals():
-        starttime = time.time()
-    else:
-        if(power > 0):
-            armruntime += time.time() - starttime
-        elif(power < 0):
-            armruntime -= time.time() - starttime
-    if(abs(armruntime)<1) and (abs(power)-15 > 0):
-        leftarmmotor.Set(power)
-        rightarmmotor.Set(power)
+    leftarmmotor.Set(power)
+    rightarmmotor.Set(power)
 
 #Competition-called code        
 def checkRestart():
@@ -71,7 +61,7 @@ def teleop():
             tensionmotor.Set(25)
         else:
             tensionmotor.Set(0)
-       if(stick.GetRawButton(1)):
+        if(stick.GetRawButton(1)):
             lastrelease = time.time()
             release.Set(0.0)
         elif(time.time()-lastrelease>=1) and (release.Get()!=1.0):
