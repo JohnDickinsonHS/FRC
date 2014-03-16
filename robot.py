@@ -20,7 +20,7 @@ def movearm(power):
 
 #Competition-called code        
 def checkRestart():
-    if stick.GetRawButton(10):
+    if stick.GetRawButton(7):
         raise RuntimeError("Restart")
 
 def disabled():
@@ -51,11 +51,15 @@ def teleop():
         checkRestart()
         stickY = stick.GetY()
         stickX = -stick.GetX()
-        throttle = stick.GetThrottle()
         # Motor control
         leftmotor.Set((-stickY)+stickX)
         rightmotor.Set((-stickY)-stickX)
-        movearm(throttle)
+        if(stick.GetRawButton(11)):
+            movearm(1)
+        elif(stick.GetRawButton(12)):
+            movearm(-10)
+        else:
+            movearm(0)
         if(stick.GetRawButton(2)):
             tensionmotor.Set(25)
         else:
