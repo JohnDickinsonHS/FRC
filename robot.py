@@ -14,9 +14,10 @@ release = wpilib.Servo(6)
 ds = wpilib.DriverStation.GetInstance()
 
 #Manually-called functions
-def movearm(power):
-    leftarmmotor.Set(power)
-    rightarmmotor.Set(power)
+def motors(motors, power):
+    if type(motors) is list:
+        for motor in motors:
+            motor.Set(power)
 
 #Competition-called code        
 def checkRestart():
@@ -33,11 +34,9 @@ def disabled():
 
 def autonomous():
     wpilib.GetWatchdog().SetEnabled(False)
-    leftmotor.Set(25)
-    rightmotor.Set(25)
+    motors([leftmotor,rightmotor],25)
     wpilib.Wait(4)
-    leftmotor.Set(0)
-    rightmotor.Set(0)
+    motors([leftmotor,rightmotor],0)
     while wpilib.IsAutonomous() and wpilib.IsEnabled():
         checkRestart()
         wpilib.Wait(0.01)
@@ -55,11 +54,11 @@ def teleop():
         leftmotor.Set((-stickY)+stickX)
         rightmotor.Set((-stickY)-stickX)
         if(stick.GetRawButton(11)):
-            movearm(1)
+            motors([leftarmmotor,rightarmmotor],10)
         elif(stick.GetRawButton(12)):
-            movearm(-10)
+            motors([leftarmmotor,rightarmmotor],-10)
         else:
-            movearm(0)
+            motors([leftarmmotor,rightarmmotor],0)
         if(stick.GetRawButton(2)):
             tensionmotor.Set(25)
         else:
