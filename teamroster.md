@@ -7,6 +7,7 @@
 * Sarah Laskowski  
 * Sebastian Hammond  
 * Nick Clark  
+* Ryan Healy
 ##Electrical Team  
 * Sub-team Captain: Kyunglok Baik  
 * Doyoung Eum  
