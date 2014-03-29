@@ -1,7 +1,12 @@
 try:
     import wpilib
-except:
-    from pyfrc import wpilib
+except ImportError:
+    print('Failed to import WPILib. Attempting to run in pyFRC simulator..')
+    try:
+        from pyfrc import wpilib
+    except ImportError:
+        print('Failed to import pyFRC. Exiting.')
+        raise SystemExit
 
 #Hardware setup
 stick = wpilib.Joystick(1)
@@ -18,6 +23,8 @@ def motors(motors, power):
     if type(motors) is list:
         for motor in motors:
             motor.Set(power)
+    else:
+        print('motors() function called with incorrect parameters. Try with a list.')
 
 #Competition-called code        
 def checkRestart():
