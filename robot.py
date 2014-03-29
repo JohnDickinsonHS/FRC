@@ -12,9 +12,7 @@ except ImportError:
 stick = wpilib.Joystick(1)
 leftmotor = wpilib.Jaguar(1)
 rightmotor = wpilib.Jaguar(2)
-leftarmmotor = wpilib.Victor(3)
-rightarmmotor = wpilib.Victor(4)
-tensionmotor = wpilib.Jaguar(5)
+armwinch = wpilib.Jaguar(5)
 release = wpilib.Servo(6)
 ds = wpilib.DriverStation.GetInstance()
 
@@ -23,13 +21,11 @@ def motors(motors, power):
     if type(motors) is list:
         for motor in motors:
             motor.Set(power)
-    else:
-        print('motors() function called with incorrect parameters. Try with a list.')
 
 #Competition-called code        
 def checkRestart():
     if stick.GetRawButton(7):
-        raise RuntimeError("Restart")
+        raise RuntimeError('Restart')
 
 def disabled():
     while wpilib.IsDisabled():
@@ -60,12 +56,12 @@ def teleop():
         # Motor control
         leftmotor.Set((-stickY)+stickX)
         rightmotor.Set((-stickY)-stickX)
-        if(stick.GetRawButton(11)):
-            motors([leftarmmotor,rightarmmotor],10)
-        elif(stick.GetRawButton(12)):
-            motors([leftarmmotor,rightarmmotor],-10)
+        if stick.GetRawButton(11):
+            armwinch.Set(25) #down
+        elif stick.GetRawButton(12):
+            armwinch.Set(-25)
         else:
-            motors([leftarmmotor,rightarmmotor],0)
+            armwinch.Set(0)
         if(stick.GetRawButton(2)):
             tensionmotor.Set(25)
         else:
@@ -76,23 +72,23 @@ def teleop():
             release.Set(0.0)
         wpilib.Wait(0.04)
 def run():
-    """Main loop"""
+    '''Main loop'''
     while 1:
         if wpilib.IsDisabled():
-            print("Running disabled()")
+            print('Running disabled()')
             disabled()
             while wpilib.IsDisabled():
                 wpilib.Wait(0.01)
         elif wpilib.IsAutonomous():
-            print("Running autonomous()")
+            print('Running autonomous()')
             autonomous()
             while wpilib.IsAutonomous() and wpilib.IsEnabled():
                 wpilib.Wait(0.01)
         else:
-            print("Running teleop()")
+            print('Running teleop()')
             teleop()
             while wpilib.IsOperatorControl() and wpilib.IsEnabled():
                 wpilib.Wait(0.01)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     wpilib.run()
