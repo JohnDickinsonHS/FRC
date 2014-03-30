@@ -13,7 +13,8 @@ stick = wpilib.Joystick(1)
 leftmotor = wpilib.Jaguar(1)
 rightmotor = wpilib.Jaguar(2)
 armwinch = wpilib.Jaguar(5)
-release = wpilib.Servo(6)
+tensionwinch = wpilib.Victor(6)
+release = wpilib.Servo(7)
 ds = wpilib.DriverStation.GetInstance()
 
 #Manually-called functions
@@ -38,7 +39,7 @@ def disabled():
 def autonomous():
     wpilib.GetWatchdog().SetEnabled(False)
     motors([leftmotor,rightmotor],25)
-    wpilib.Wait(4)
+    wpilib.Wait(1)
     motors([leftmotor,rightmotor],0)
     while wpilib.IsAutonomous() and wpilib.IsEnabled():
         checkRestart()
@@ -56,17 +57,17 @@ def teleop():
         # Motor control
         leftmotor.Set((-stickY)+stickX)
         rightmotor.Set((-stickY)-stickX)
-        if stick.GetRawButton(11):
-            armwinch.Set(25) #down
-        elif stick.GetRawButton(12):
+        if stick.GetRawButton(11): #arm down
+            armwinch.Set(25)
+        elif stick.GetRawButton(12): #arm up
             armwinch.Set(-25)
-        else:
+        else: #stop winding arm
             armwinch.Set(0)
-        if(stick.GetRawButton(2)):
-            tensionmotor.Set(25)
-        else:
-            tensionmotor.Set(0)
-        if(stick.GetRawButton(1)):
+        if(stick.GetRawButton(2)): #wind up plunger
+            tensionwinch.Set(25)
+        else: #stop winding
+            tensionwinch.Set(0)
+        if(stick.GetRawButton(1)): #move servo
             release.Set(1.0)
             wpilib.Wait(0.5)
             release.Set(0.0)
