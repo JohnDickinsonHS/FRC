@@ -22,6 +22,8 @@ def motors(motors, power):
     if type(motors) is list:
         for motor in motors:
             motor.Set(power)
+    else:
+        print('Motors function should be called with a list.')
 
 #Competition-called code        
 def checkRestart():
