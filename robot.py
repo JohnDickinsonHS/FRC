@@ -32,9 +32,6 @@ def checkRestart():
 
 def disabled():
     while wpilib.IsDisabled():
-        '''if(ds.GetDigitalIn(1)):
-
-        '''
         checkRestart()
         wpilib.Wait(0.01)
 
